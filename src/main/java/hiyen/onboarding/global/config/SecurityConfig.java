@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .httpBasic(auth -> auth.disable())
                 .authorizeHttpRequests(
                         authorizeHttp -> {
-                            authorizeHttp.requestMatchers("/api/auth/**").permitAll();
+                            authorizeHttp.requestMatchers("/api/users/signup").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )
