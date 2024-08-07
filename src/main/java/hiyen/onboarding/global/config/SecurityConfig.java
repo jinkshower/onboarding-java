@@ -1,6 +1,8 @@
 package hiyen.onboarding.global.config;
 
-import hiyen.onboarding.global.auth.JwtAuthFilter;
+import hiyen.onboarding.global.auth.CustomAccessDeniedHandler;
+import hiyen.onboarding.global.auth.CustomAuthenticationEntryPoint;
+import hiyen.onboarding.global.auth.jwt.JwtAuthFilter;
 import hiyen.onboarding.global.auth.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,8 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,6 +43,9 @@ public class SecurityConfig {
                         }
                 )
                 .addFilterBefore(new JwtAuthFilter(jwtProvider), AuthorizationFilter.class)
+                .exceptionHandling((exceptionHandling) -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .build();
     }
 

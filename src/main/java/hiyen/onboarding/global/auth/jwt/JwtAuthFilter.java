@@ -1,6 +1,7 @@
-package hiyen.onboarding.global.auth;
+package hiyen.onboarding.global.auth.jwt;
 
-import hiyen.onboarding.global.auth.jwt.JwtProvider;
+import hiyen.onboarding.global.auth.AuthDTO;
+import hiyen.onboarding.global.auth.CustomUserDetails;
 import hiyen.onboarding.user.domain.Authority;
 import hiyen.onboarding.user.domain.Authority.UserAuthority;
 import jakarta.servlet.FilterChain;
@@ -57,7 +58,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private Set<Authority> toAuthorities(String tokenAuthority) {
+    private Set<Authority> toAuthorities(final String tokenAuthority) {
         String[] split = tokenAuthority.split(JwtProvider.AUTHORITY_DELIMITER);
         return Arrays.stream(split)
                 .map(UserAuthority::of)
