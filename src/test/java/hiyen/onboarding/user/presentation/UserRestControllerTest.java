@@ -3,10 +3,12 @@ package hiyen.onboarding.user.presentation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import hiyen.onboarding.common.AcceptanceTest;
+import hiyen.onboarding.user.presentation.request.UserSignRequest;
 import hiyen.onboarding.user.presentation.request.UserSignupRequest;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -80,11 +82,49 @@ class UserRestControllerTest extends AcceptanceTest {
         }
     }
 
+    @Nested
+    @DisplayName("로그인")
+    class Login {
+
+        final String username = "testuser123";
+        final String password = "Password1";
+        final String nickname = "jinkshower";
+
+        @BeforeEach
+        void setUp() {
+            final UserSignupRequest request = new UserSignupRequest(username, password, nickname);
+            signup(request);
+        }
+
+        @Test
+        @DisplayName("성공")
+        void success() {
+            // given
+            final UserSignRequest request = new UserSignRequest(username, password);
+
+            // when
+            ExtractableResponse<Response> response = sign(request);
+
+            // then
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(response.header("Authorization")).isNotNull();
+        }
+    }
+
     private ExtractableResponse<Response> signup(final UserSignupRequest request) {
         return RestAssured.given().log().all()
                 .body(request)
                 .contentType("application/json")
                 .when().post("/api/users/signup")
+                .then().log().all()
+                .extract();
+    }
+
+    private ExtractableResponse<Response> sign(final UserSignRequest request) {
+        return RestAssured.given().log().all()
+                .body(request)
+                .contentType("application/json")
+                .when().post("/api/users/sign")
                 .then().log().all()
                 .extract();
     }
