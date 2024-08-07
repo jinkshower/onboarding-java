@@ -1,6 +1,7 @@
-package hiyen.onboarding;
+package hiyen.onboarding.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import hiyen.onboarding.user.domain.Authority;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
