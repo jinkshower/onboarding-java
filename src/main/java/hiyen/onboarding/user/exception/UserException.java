@@ -13,6 +13,13 @@ public class UserException extends RuntimeException {
         }
     }
 
+    public static class NotFoundAuthorityException extends UserException {
+
+        public NotFoundAuthorityException() {
+            super("Authority not found");
+        }
+    }
+
     public static class DuplicatedUserException extends UserException {
 
         public DuplicatedUserException() {

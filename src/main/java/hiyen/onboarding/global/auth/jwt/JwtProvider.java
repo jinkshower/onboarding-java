@@ -16,6 +16,7 @@ public class JwtProvider {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER = "Bearer ";
+    public static final String AUTHORITY_DELIMITER = ",";
 
     private static final String USERNAME = "username";
     private static final String AUTHORITY = "authority";
@@ -52,7 +53,7 @@ public class JwtProvider {
 
         final String authority = authorities.stream()
                 .map(it -> it.getAuthority().name())
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining(AUTHORITY_DELIMITER));
 
         return Jwts.builder()
                 .claim(USERNAME, username)

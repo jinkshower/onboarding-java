@@ -15,9 +15,13 @@ spring:
         show_sql: true
         format_sql: true
     show-sql: true
+  jwt:
+    secret: tininfadsklfneiwoamekmrkmakldkfvionzbclvknaaaaaaaaiiiirenkirnekrneknkndfmzncxvzmciei
+    expiration: 86400000
 
 logging:
   level:
+    root: debug
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
-    org.springframework.org.springframework.security: DEBUG
+    org.springframework.security: trace
