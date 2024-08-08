@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +39,9 @@ public class SecurityConfig {
                 .httpBasic(auth -> auth.disable())
                 .authorizeHttpRequests(
                         authorizeHttp -> {
-                            authorizeHttp.requestMatchers("/api/users/sign", "/api/users/signup","/error", "/api/tokens/refresh").permitAll();
+                            authorizeHttp.requestMatchers("/api/users/sign", "/api/users/signup", "/api/tokens/refresh").permitAll();
+                            authorizeHttp.requestMatchers("/error").permitAll();
+                            authorizeHttp.requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/swagger").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )

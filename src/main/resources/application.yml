@@ -22,6 +22,9 @@ spring:
   jwt:
     secret: tininfadsklfneiwoamekmrkmakldkfvionzbclvknaaaaaaaaiiiirenkirnekrneknkndfmzncxvzmciei
     expiration: 86400
+springdoc:
+  swagger-ui:
+    path: /swagger
 
 logging:
   level:

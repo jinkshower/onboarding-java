@@ -10,6 +10,8 @@ import hiyen.onboarding.user.presentation.request.UserSignupRequest;
 import hiyen.onboarding.user.presentation.response.AuthorityResponse;
 import hiyen.onboarding.user.presentation.response.TokenResponse;
 import hiyen.onboarding.user.presentation.response.UserResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.Set;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "UserRestController", description = "사용자 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -33,6 +36,7 @@ public class UserRestController {
     private final TokenService tokenService;
 
     @PostMapping("/signup")
+    @Operation(summary = "회원가입", description = "회원가입을 진행합니다.")
     public ResponseEntity<UserResponse> signup(@RequestBody @Validated final UserSignupRequest request) {
 
         final User created = userService.signup(request);
@@ -45,6 +49,7 @@ public class UserRestController {
     }
 
     @PostMapping("/sign")
+    @Operation(summary = "로그인", description = "로그인을 진행합니다.")
     public ResponseEntity<TokenResponse> sign(@RequestBody final UserSignRequest request, final HttpServletResponse response) {
 
         final User login = userService.sign(request);
@@ -60,6 +65,7 @@ public class UserRestController {
     }
 
     @GetMapping("/check")
+    @Operation(summary = "사용자 확인", description = "사용자 확인을 진행합니다.")
     public ResponseEntity<String> check(Authentication authentication) {
         return ResponseEntity.ok(authentication.getName());
     }
