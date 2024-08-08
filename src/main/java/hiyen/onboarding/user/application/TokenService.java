@@ -1,6 +1,7 @@
 package hiyen.onboarding.user.application;
 
 import hiyen.onboarding.global.auth.AuthDTO;
+import hiyen.onboarding.global.auth.AuthException.FailAuthenticationUserException;
 import hiyen.onboarding.global.auth.jwt.JwtProvider;
 import hiyen.onboarding.user.domain.RefreshToken;
 import hiyen.onboarding.user.domain.User;
@@ -29,7 +30,8 @@ public class TokenService {
     }
 
     public String reissue(final String refreshToken) {
-        final AuthDTO authDTO = refreshTokenRepository.findByRefreshToken(refreshToken);
+        final AuthDTO authDTO = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(FailAuthenticationUserException::new);
 
         return jwtProvider.createToken(authDTO.username(), authDTO.authorities());
     }

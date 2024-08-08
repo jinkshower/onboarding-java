@@ -3,6 +3,7 @@ package hiyen.onboarding.user.repository;
 import hiyen.onboarding.global.auth.AuthDTO;
 import hiyen.onboarding.global.auth.AuthException.FailAuthenticationUserException;
 import hiyen.onboarding.user.domain.RefreshToken;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,11 +22,7 @@ public class RefreshTokenRepository {
                 refreshToken.refreshToken(), refreshToken.authDTO(), REFRESH_TOKEN_EXPIRATION, TimeUnit.MINUTES);
     }
 
-    public AuthDTO findByRefreshToken(final String refreshToken) {
-        try {
-            return (AuthDTO) redisTemplate.opsForValue().get(refreshToken);
-        } catch (Exception e) {
-            throw new FailAuthenticationUserException(e);
-        }
+    public Optional<AuthDTO> findByRefreshToken(final String refreshToken) {
+        return Optional.ofNullable((AuthDTO) redisTemplate.opsForValue().get(refreshToken));
     }
 }
