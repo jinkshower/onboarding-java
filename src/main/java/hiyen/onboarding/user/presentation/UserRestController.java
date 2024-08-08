@@ -1,7 +1,8 @@
 package hiyen.onboarding.user.presentation;
 
 import hiyen.onboarding.global.auth.jwt.JwtProvider;
-import hiyen.onboarding.user.application.UserAuthService;
+import hiyen.onboarding.user.application.TokenService;
+import hiyen.onboarding.user.application.UserService;
 import hiyen.onboarding.user.domain.Authority;
 import hiyen.onboarding.user.domain.User;
 import hiyen.onboarding.user.presentation.request.UserSignRequest;
@@ -15,7 +16,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserRestController {
 
-    private final UserAuthService userAuthService;
-    private final JwtProvider jwtProvider;
+    private final UserService userService;
+    private final TokenService tokenService;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signup(@RequestBody @Validated final UserSignupRequest request) {
 
-        final User created = userAuthService.signup(request);
+        final User created = userService.signup(request);
         final UserResponse response = new UserResponse(
                 created.getUsername(), created.getNickname(), toAuthorityResponse(created.getAuthorities()));
         final URI uri = URI.create("/api/users/" + created.getUserId());
@@ -44,14 +47,21 @@ public class UserRestController {
     @PostMapping("/sign")
     public ResponseEntity<TokenResponse> sign(@RequestBody final UserSignRequest request, final HttpServletResponse response) {
 
-        final User login = userAuthService.sign(request);
-        final String token = jwtProvider.createToken(login.getUsername(), login.getAuthorities());
-        final TokenResponse tokenResponse = new TokenResponse(token);
+        final User login = userService.sign(request);
+        final String accessToken = tokenService.createAccessToken(login);
+        final String refreshToken = tokenService.createRefreshToken(login);
+        final TokenResponse tokenResponse = new TokenResponse(accessToken);
 
-        response.setHeader(JwtProvider.AUTHORIZATION_HEADER, JwtProvider.BEARER + token);
+        response.setHeader(JwtProvider.AUTHORIZATION_HEADER, JwtProvider.BEARER + accessToken);
+        response.setHeader("Refresh-Token", refreshToken);
 
         return ResponseEntity.ok()
                 .body(tokenResponse);
+    }
+
+    @GetMapping("/check")
+    public ResponseEntity<String> check(Authentication authentication) {
+        return ResponseEntity.ok(authentication.getName());
     }
 
     private Set<AuthorityResponse> toAuthorityResponse(final Set<Authority> authorities) {
