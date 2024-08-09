@@ -10,6 +10,11 @@ Spring Security와 Jwt를 사용하여 토큰 기반 인증, 인가를 수행하
 - Access Token과 Refresh Token을 발급
 - EC2 배포
 
+## SwaggerUI
+```
+http://ec2-43-203-119-0.ap-northeast-2.compute.amazonaws.com:8080/swagger
+```
+
 ## 질답
 
 - Filter, Interceptor, AOP
@@ -39,7 +44,7 @@ JSON 포맷을 이용하여 사용자에 대한 속성을 저장하는 Claim 기
 
 ## EC2 배포 완료
 
-![Pasted image 20240808210219](https://github.com/user-attachments/assets/8064c0c3-e0ca-47cd-b22f-f86d7b45af65)
+![Pasted image 20240809131540](https://github.com/user-attachments/assets/2376bd2a-0009-4f6d-a8f0-e0fc289a054a)
 
 ## How to run
 
